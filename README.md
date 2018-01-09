@@ -150,7 +150,8 @@ DRF_TRACKING_ELASTIC_CONFIG = {
     "port": 9200,
     "http_auth": ('my-user', 'my-password')
 }
-DRF_TRACKING_ELASTIC_INDEX = 'my-index'  # lowercase
+DRF_TRACKING_ELASTIC_INDEX = 'my-index'  # Default "drf-tracking-%{+YYYY.MM.dd}""
+DRF_TRACKING_ELASTIC_TYPE = 'my-type'  # Default "drf_logs"
 ```
 
 every config that you put in `DRF_TRACKING_ELASTIC_CONFIG` will be directly put in the elasticsearch connection.
