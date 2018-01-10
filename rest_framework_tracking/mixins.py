@@ -21,17 +21,20 @@ class BaseLoggingMixin(object):
     log = {}
     # Elastic search config
     elasticsearch_enabled = hasattr(settings, 'DRF_TRACKING_ELASTIC_CONFIG')
+    log_request_data = getattr(settings, 'DRF_TRACKING_LOG_REQUEST_DATA', True)
 
     def __init__(self, *args, **kwargs):
         assert isinstance(self.CLEANED_SUBSTITUTE, str), 'CLEANED_SUBSTITUTE must be a string.'
         super(BaseLoggingMixin, self).__init__(*args, **kwargs)
 
     def initial(self, request, *args, **kwargs):
+        if self.log_request_data:
+            self.log['data'] = request.body
+
         super(BaseLoggingMixin, self).initial(request, *args, **kwargs)
 
         self.log['requested_at'] = now()
-        if getattr(settings, 'DRF_TRACKING_LOG_REQUEST_DATA', True):
-            self.log['data'] = request.body
+        if self.log_request_data:
             try:
                 # Accessing request.data *for the first time* parses the request body, which may
                 # raise ParseError and UnsupportedMediaType exceptions. It's important not to
