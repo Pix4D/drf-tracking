@@ -59,24 +59,23 @@ class BaseLoggingMixin(object):
         should_log = self._should_log if hasattr(self, '_should_log') else self.should_log
 
         if should_log(request, response):
-
-            self.log.update(
-                {
-                    'remote_addr': self._get_ip_address(request),
-                    'view': self._get_view_name(request),
-                    'view_method': self._get_view_method(request),
-                    'path': request.path,
-                    'host': request.get_host(),
-                    'method': request.method,
-                    'query_params': self._clean_data(request.query_params.dict()),
-                    'user': self._get_user(request),
-                    'response_ms': self._get_response_ms(),
-                    'response': response.rendered_content,
-                    'status_code': response.status_code,
-                    'data': self._clean_data(self.log.get('data'))
-                }
-            )
             try:
+                self.log.update(
+                    {
+                        'remote_addr': self._get_ip_address(request),
+                        'view': self._get_view_name(request),
+                        'view_method': self._get_view_method(request),
+                        'path': request.path,
+                        'host': request.get_host(),
+                        'method': request.method,
+                        'query_params': self._clean_data(request.query_params.dict()),
+                        'user': self._get_user(request),
+                        'response_ms': self._get_response_ms(),
+                        'response': response.rendered_content,
+                        'status_code': response.status_code,
+                        'data': self._clean_data(self.log.get('data'))
+                    }
+                )
                 self.handle_log()
             except Exception as e:
                 # ensure that all exceptions raised by handle_log doesn't prevent API call to
